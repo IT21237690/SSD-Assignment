@@ -1,0 +1,9 @@
+.dashboard-product-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.delete-button {
+    background-color: red !important;
+    color: white;
+}

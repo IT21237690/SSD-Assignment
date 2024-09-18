@@ -1,0 +1,42 @@
+.spaceBetweenItems{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.colorBoxRed{
+    background-color: #ff0000;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    margin: auto;
+}
+.colorBoxGreen{
+    background-color: #02c102;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    margin: auto;
+}
+
+.lightBlueBtn{
+    background-color: #0091c9;
+    border-color: #0091c9;
+    color: white;
+}
+.lightBlueBtn:hover{
+    background-color: #016b96;
+    color: white;
+    border-color: #016b96;
+}
+
+.editBtn{
+    background-color: #065A82;
+    border-color: #065A82;
+    color: white;
+}
+.editBtn:hover{
+    background-color: #016b96;
+    color: white;
+    border-color: #016b96;
+}

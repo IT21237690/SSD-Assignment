@@ -1,0 +1,15 @@
+.category-page-container {
+    min-height: 90vh;
+}
+
+.category-banner-container {
+    height: 200px;
+    background-color: #76B666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.search-bar {
+    padding: 15px 25px; /* Adjust the padding values as per your preference */
+}
