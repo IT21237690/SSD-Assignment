@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const NoticeBoard = () => {
   const [notices, setNotices] = useState([]);
@@ -7,10 +7,10 @@ const NoticeBoard = () => {
   useEffect(() => {
     const fetchNotices = async () => {
       try {
-        const response = await axios.get('http://localhost:8070/announcement');
+        const response = await axios.get("http://localhost:8070/announcement");
         setNotices(response.data);
       } catch (error) {
-        console.error('Error fetching notices:', error);
+        console.error("Error fetching notices:", error);
       }
     };
 
@@ -21,9 +21,9 @@ const NoticeBoard = () => {
     <div className="work-section-wrapper">
       <div className="work-section-top">
         <h1 className="primary-heading">Notice Board</h1>
-        <br/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
         <table className="notice-chart">
           <thead>
             <tr>

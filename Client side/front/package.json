@@ -30,7 +30,8 @@
     "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier": "prettier --write '**/*.{js,ts,jsx,tsx,json,css,md}'"
   },
   "eslintConfig": {
     "extends": [
@@ -49,5 +50,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
   }
 }

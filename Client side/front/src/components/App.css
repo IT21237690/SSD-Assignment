@@ -55,7 +55,7 @@ nav {
 }
 .primary-button:hover {
   background-color: rgb(155, 187, 199);
-  background-color: #9EB3C2;
+  background-color: #9eb3c2;
 }
 
 .navbar-menu-container svg {
@@ -123,7 +123,7 @@ nav {
   font-size: 1.5rem;
 }
 .secondary-button:hover {
-  background-color: #9EB3C2;
+  background-color: #9eb3c2;
 }
 .about-section-container {
   margin-top: 20rem;
@@ -186,7 +186,7 @@ nav {
   margin: 6rem 0rem;
 }
 .contact-form-container {
-  background-color: #9EB3C2;
+  background-color: #9eb3c2;
   max-width: 700px;
   width: 100%;
   margin-top: 3rem;
@@ -240,7 +240,7 @@ nav {
 }
 .testimonial-section-bottom {
   margin-top: 2rem;
-  background-color: #9EB3C2;
+  background-color: #9eb3c2;
   padding: 1.5rem 2rem;
   display: flex;
   align-items: center;
@@ -451,7 +451,6 @@ nav {
   text-align: left;
 }
 
-
 .notice-chart tbody tr:hover {
   background-color: #6fc8eb;
 }
@@ -521,5 +520,3 @@ nav {
 .contact-container li {
   margin-bottom: 1rem;
 }
-
-

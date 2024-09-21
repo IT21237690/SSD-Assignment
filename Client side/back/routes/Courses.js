@@ -21,17 +21,20 @@ router.route("/add").post((req, res) => {
     startingTime,
     date,
     timeDuration,
-    fee
-  })
+    fee,
+  });
 
-  newCourse.save().then(() => {
-    res.json("Course Added")
-  }).catch((err) => {
-    console.log(err);
-  })
-})
+  newCourse
+    .save()
+    .then(() => {
+      res.json("Course Added");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
-//report 
+//report
 router.get("/reporting", async (_req, res, next) => {
   try {
     const courses = await course.find({}).sort({ CreatedAt: -1 });
@@ -52,7 +55,6 @@ router.get("/reporting", async (_req, res, next) => {
       "Date",
       "Time Duration",
       "Fee",
-
     ];
     const rows = [];
     courses.map((i) => {
@@ -66,7 +68,7 @@ router.get("/reporting", async (_req, res, next) => {
         i.timeDuration,
         i.fee,
       ]);
-    });    
+    });
     const tableArray = {
       headers: headers,
       rows: rows,
@@ -81,13 +83,13 @@ router.get("/reporting", async (_req, res, next) => {
     });
     // create a buffer from the PDF document
     let chunks = [];
-    doc.on('data', (chunk) => {
+    doc.on("data", (chunk) => {
       chunks.push(chunk);
     });
-    doc.on('end', () => {
+    doc.on("end", () => {
       const pdfBlob = Buffer.concat(chunks);
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'attachment; filename="myfile.pdf"');
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", 'attachment; filename="myfile.pdf"');
       res.send(pdfBlob);
     });
     // done
@@ -98,29 +100,34 @@ router.get("/reporting", async (_req, res, next) => {
   }
 });
 
-
 //get details about all
 router.route("/").get((req, res) => {
-  course.find().then((course) => {
-    res.json(course)
-  }).catch((err) => {
-    console.log(err)
-  })
-})
+  course
+    .find()
+    .then((course) => {
+      res.json(course);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 //get details about one
 router.get("/:id", async (req, res) => {
   let id = req.params.id;
 
-  const details = await course.findById(id)
+  const details = await course
+    .findById(id)
     .then((details) => {
-     return res.status(200).send({ status: "details fetched"})
-    }).catch((err) => {
-      console.log(err.message);
-      res.status(500).send({ status: "Error with get details", error: err.message });
+      return res.status(200).send({ status: "details fetched" });
     })
-
-})
+    .catch((err) => {
+      console.log(err.message);
+      res
+        .status(500)
+        .send({ status: "Error with get details", error: err.message });
+    });
+});
 
 //get details about one part 02
 router.get("/get/:id", async (req, res) => {
@@ -130,13 +137,11 @@ router.get("/get/:id", async (req, res) => {
 
     const courseSingle = await course.findOne({ courseID: id });
     console.log(courseSingle);
-    return res.status(201).json(courseSingle)
-
+    return res.status(201).json(courseSingle);
   } catch (error) {
-    res.status(404).json(error)
+    res.status(404).json(error);
   }
-})
-
+});
 
 //search function
 router.route("/search/:id").get(async (req, res) => {
@@ -144,18 +149,26 @@ router.route("/search/:id").get(async (req, res) => {
   course.findOne({ courseID: { courseId: query } }, (err, results) => {
     if (err) {
       console.log(err);
-      res.status(500).send('Error searching for result');
+      res.status(500).send("Error searching for result");
     } else {
       res.json(results);
     }
   });
 });
 
-
 //update
 router.route("/update/:id").put(async (req, res) => {
-  let cID = req.params.courseID
-  const { courseID, courseName, teacherName, grade, startingTime, date, timeDuration, fee } = req.body
+  let cID = req.params.courseID;
+  const {
+    courseID,
+    courseName,
+    teacherName,
+    grade,
+    startingTime,
+    date,
+    timeDuration,
+    fee,
+  } = req.body;
 
   const updateCourse = {
     courseID,
@@ -165,27 +178,38 @@ router.route("/update/:id").put(async (req, res) => {
     startingTime,
     date,
     timeDuration,
-    fee
-  }
+    fee,
+  };
 
-  const update = await course.findOneAndUpdate(cID, updateCourse).then(() => {
-    res.status(200).send({ status: "Course Details updated" })
-  }).catch((err) => {
-    console.log(err);
-    res.status(500).send({ status: "Error with updating details" });
-  })
-})
+  const update = await course
+    .findOneAndUpdate(cID, updateCourse)
+    .then(() => {
+      res.status(200).send({ status: "Course Details updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ status: "Error with updating details" });
+    });
+});
 
 //delete
 router.route("/delete/:id").delete(async (req, res) => {
   let courseID = req.params.courseID;
 
-  await course.findOneAndDelete(courseID).then(() => {
-    res.status(200).send({ status: "Course deleted" });
-  }).catch((err) => {
-    console.log(err.message);
-    res.status(500).send({ status: "Error with delete course details", error: err.message });
-  })
-})
+  await course
+    .findOneAndDelete(courseID)
+    .then(() => {
+      res.status(200).send({ status: "Course deleted" });
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res
+        .status(500)
+        .send({
+          status: "Error with delete course details",
+          error: err.message,
+        });
+    });
+});
 
 module.exports = router;

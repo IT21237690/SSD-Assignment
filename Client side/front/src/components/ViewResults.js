@@ -1,26 +1,24 @@
-import { useParams } from 'react-router-dom';
-import React, { useContext, useEffect ,useState} from 'react';
-import { LoginContext } from './ContextProvider/Context';
-import { useNavigate,NavLink } from 'react-router-dom';
-import axios from 'axios';
-
-
+import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { LoginContext } from "./ContextProvider/Context";
+import { useNavigate, NavLink } from "react-router-dom";
+import axios from "axios";
 
 const ResultPage = () => {
   const { logindata, setLoginData } = useContext(LoginContext);
   const { name } = useParams();
-  const [marks, setMarks] = useState('');
+  const [marks, setMarks] = useState("");
 
   const history = useNavigate();
 
   const validateUser = async () => {
-    const token = localStorage.getItem('usersdatatoken');
+    const token = localStorage.getItem("usersdatatoken");
 
     try {
-      const res = await fetch('/student/validuser', {
-        method: 'GET',
+      const res = await fetch("/student/validuser", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: token,
         },
       });
@@ -28,11 +26,10 @@ const ResultPage = () => {
       const data = await res.json();
 
       if (data.status === 401 || !data) {
-        history('*');
+        history("*");
       } else {
-        console.log('user verified');
+        console.log("user verified");
         setLoginData(data);
-        
       }
     } catch (error) {
       console.error(error);
@@ -41,7 +38,9 @@ const ResultPage = () => {
 
   const handleGetResult = async () => {
     try {
-      const response = await axios.get(`/student/results/${logindata ? logindata.ValidUserOne.name : ''}`);
+      const response = await axios.get(
+        `/student/results/${logindata ? logindata.ValidUserOne.name : ""}`,
+      );
       const data = response.data;
       setMarks(data.marks);
     } catch (err) {

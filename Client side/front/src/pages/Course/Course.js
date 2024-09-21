@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const Course = () => {
   const { id } = useParams();
@@ -62,39 +62,29 @@ const Course = () => {
                           <center>
                             <div class="col-sm-8">
                               <p class="m-b-10 f-w-600">Course Name:</p>
-                              <h6 class="text-muted f-w-400">
-                                {courseName}
-                              </h6>
+                              <h6 class="text-muted f-w-400">{courseName}</h6>
                             </div>
                           </center>
                           <div class="col-sm-6">
                             <br />
                             <p class="m-b-10 f-w-600">Teacher's Name:</p>
-                            <h6 class="text-muted f-w-400">
-                              {teacherName}
-                            </h6>
+                            <h6 class="text-muted f-w-400">{teacherName}</h6>
                           </div>
                           <div class="col-sm-6">
                             <br />
                             <p class="m-b-10 f-w-600">Grade:</p>
-                            <h6 class="text-muted f-w-400">
-                              Grade {grade}
-                            </h6>
+                            <h6 class="text-muted f-w-400">Grade {grade}</h6>
                           </div>
 
                           <div class="col-6 ">
                             <br />
                             <p class="m-b-10 f-w-600">Starting Time:</p>
-                            <h6 class="text-muted f-w-400">
-                              {startingTime}
-                            </h6>
+                            <h6 class="text-muted f-w-400">{startingTime}</h6>
                           </div>
                           <div class="col-6">
                             <br />
                             <p class="m-b-10 f-w-600">Date:</p>
-                            <h6 class="text-muted f-w-400">
-                              {date}
-                            </h6>
+                            <h6 class="text-muted f-w-400">{date}</h6>
                           </div>
 
                           <div class="col-6 ">
@@ -107,9 +97,7 @@ const Course = () => {
                           <div class="col-6">
                             <br />
                             <p class="m-b-10 f-w-600">Monthly Fee:</p>
-                            <h6 class="text-muted f-w-400">
-                              Rs. {fee}
-                            </h6>
+                            <h6 class="text-muted f-w-400">Rs. {fee}</h6>
                           </div>
                         </div>
 
@@ -127,9 +115,20 @@ const Course = () => {
       </div>
 
       <Link to={`/Student_Courses/Course/payment/${course._id}`}>
-      <button type="submit" class="btn btn-primary" style={{backgroundColor:'#065A82',color:'white',marginBottom:'50px',marginTop:'0px',width:'40%'}}><b>Enroll</b></button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          style={{
+            backgroundColor: "#065A82",
+            color: "white",
+            marginBottom: "50px",
+            marginTop: "0px",
+            width: "40%",
+          }}
+        >
+          <b>Enroll</b>
+        </button>
       </Link>
-
     </center>
   );
 };

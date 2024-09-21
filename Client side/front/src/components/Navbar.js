@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import Logo from "../Assets/Logo.svg";
 import { HiOutlineBars3 } from "react-icons/hi2";
-import{
+import {
   Box,
   Drawer,
   ListItem,
@@ -15,8 +15,7 @@ import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 
 const Navbar = () => {
-
-  const [openMenu,setOpenMenu] = useState(false)
+  const [openMenu, setOpenMenu] = useState(false);
   const menuOptions = [
     {
       text: "Home",
@@ -37,14 +36,13 @@ const Navbar = () => {
   ];
   return (
     <nav>
-      <div className="nav-logo-container">
-      </div>
+      <div className="nav-logo-container"></div>
       <div className="navbar-links-container">
         <a href="">Home</a>
         <a href="">Institute</a>
         <a href="">Notice Board</a>
         <a href="">Contact Us</a>
-        
+
         <button className="primary-button">Sign in</button>
       </div>
       <div className="navbar-menu-container">
@@ -59,9 +57,9 @@ const Navbar = () => {
         >
           <list>
             {menuOptions.map((item) => (
-              <ListItem key={item.text} disablePadding >
-              <ListItemButton>{item.icon}</ListItemButton>
-              <ListItemText primary={item.text} />
+              <ListItem key={item.text} disablePadding>
+                <ListItemButton>{item.icon}</ListItemButton>
+                <ListItemText primary={item.text} />
               </ListItem>
             ))}
           </list>

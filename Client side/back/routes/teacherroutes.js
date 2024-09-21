@@ -1,14 +1,11 @@
 // import necessary modules
-const bcrypt = require('bcryptjs');
-const { Router } = require('express');
-const teacherdb = require('../models/teacherSchema');
+const bcrypt = require("bcryptjs");
+const { Router } = require("express");
+const teacherdb = require("../models/teacherSchema");
 const teacherauth = require("../middleware/teacherauthentication");
 
 // create a new router instance
 const router = Router();
-
-
-
 
 router.post("/forgot-password", async (req, res) => {
   const { email, answer, password } = req.body;
@@ -24,14 +21,16 @@ router.post("/forgot-password", async (req, res) => {
     const { securityQuestion, securityAnswer } = teacher;
 
     if (!securityQuestion) {
-      return res.json({ message: "Security question is not set for this teacher" });
+      return res.json({
+        message: "Security question is not set for this teacher",
+      });
     }
 
     if (!answer) {
       return res.json({ question: securityQuestion });
     }
 
-    const isAnswerCorrect = (answer === teacher.securityAnswer)
+    const isAnswerCorrect = answer === teacher.securityAnswer;
 
     if (!isAnswerCorrect) {
       return res.json({ message: "Incorrect security answer" });
@@ -48,46 +47,55 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
-
-
-
 router.post("/registerteacher", async (req, res) => {
-
-  const { name,nic,address,age,gender,land,mobile,email,workPlace,subject,password,securityAnswer } = req.body;
-        
+  const {
+    name,
+    nic,
+    address,
+    age,
+    gender,
+    land,
+    mobile,
+    email,
+    workPlace,
+    subject,
+    password,
+    securityAnswer,
+  } = req.body;
 
   try {
+    const preuser = await teacherdb.findOne({ email: email });
 
-      const preuser = await teacherdb.findOne({ email: email });
+    if (preuser) {
+      return res.status(422).json({ error: "This Email is Already Exist" });
+    } else {
+      const finalUser = new teacherdb({
+        name,
+        nic,
+        address,
+        age,
+        gender,
+        land,
+        mobile,
+        email,
+        workPlace,
+        subject,
+        password,
+        securityAnswer,
+      });
 
-      if (preuser) {
-          return res.status(422).json({ error: "This Email is Already Exist" })
-      } else {
+      // here password hasing
 
-       
-          const finalUser = new teacherdb({
-            name,nic,address,age,gender,land,mobile,email,workPlace,subject,password,securityAnswer
-          });
+      const storeData = await finalUser.save();
 
-         
-
-          // here password hasing
-
-          const storeData = await finalUser.save();
-
-          // console.log(storeData);
-         return res.status(201).json({ status: 201, storeData })
-      }
-
+      // console.log(storeData);
+      return res.status(201).json({ status: 201, storeData });
+    }
   } catch (error) {
     console.log(error);
-     return res.status(424).json(error);
-      
+    return res.status(424).json(error);
   }
-
 });
-
-
 
 router.post("/Tlogin", async (req, res) => {
   const { email, password } = req.body;
@@ -100,23 +108,19 @@ router.post("/Tlogin", async (req, res) => {
     const userValid = await teacherdb.findOne({ email });
 
     if (!userValid.isAdminApproved) {
-      return res.status(420).json({ status: 420})
+      return res.status(420).json({ status: 420 });
     }
 
     if (userValid) {
       const isMatch = await bcrypt.compare(password, userValid.password);
 
-
-  
       if (!isMatch) {
-        console.log(!isMatch)
+        console.log(!isMatch);
         return res.status(421).json({ error: "Invalid email or password" });
-        
-
       }
-  
+
       const token = await userValid.generateAuthtoken();
-  
+
       res.cookie("usercookie", token, {
         expires: new Date(Date.now() + 9000000),
         httpOnly: true,
@@ -137,55 +141,44 @@ router.post("/Tlogin", async (req, res) => {
   }
 });
 
-
-router.get("/validteacher",teacherauth,async(req,res)=>{
+router.get("/validteacher", teacherauth, async (req, res) => {
   try {
-      const Validteacher = await teacherdb.findOne({_id:req.userId});
-      res.status(201).json({status:201,Validteacher});
+    const Validteacher = await teacherdb.findOne({ _id: req.userId });
+    res.status(201).json({ status: 201, Validteacher });
   } catch (error) {
-      res.status(401).json({status:401,error});
+    res.status(401).json({ status: 401, error });
   }
 });
 
-router.get("/getteacher/:id",teacherauth,async(req,res)=>{
+router.get("/getteacher/:id", teacherauth, async (req, res) => {
   try {
-      const Validteacher = await teacherdb.findOne({_id:req.userId});
-      res.status(201).json({status:201,Validteacher});
-      console.log(req.params);
-      const {id} = req.params;
+    const Validteacher = await teacherdb.findOne({ _id: req.userId });
+    res.status(201).json({ status: 201, Validteacher });
+    console.log(req.params);
+    const { id } = req.params;
 
-      const userindividual = await teacherdb.findById({_id:id});
-      console.log(userindividual);
-      res.status(201).json(userindividual)
-
+    const userindividual = await teacherdb.findById({ _id: id });
+    console.log(userindividual);
+    res.status(201).json(userindividual);
   } catch (error) {
-      res.status(422).json(error);
+    res.status(422).json(error);
   }
 });
 
-router.get("/Tlogout",teacherauth,async(req,res)=>{
+router.get("/Tlogout", teacherauth, async (req, res) => {
   try {
-      req.rootUser.tokens =  req.rootUser.tokens.filter((curelem)=>{
-          return curelem.token !== req.token
-      });
+    req.rootUser.tokens = req.rootUser.tokens.filter((curelem) => {
+      return curelem.token !== req.token;
+    });
 
-      res.clearCookie("usercookie",{path:"/"});
+    res.clearCookie("usercookie", { path: "/" });
 
-      req.rootUser.save();
+    req.rootUser.save();
 
-      res.status(201).json({status:201})
-
+    res.status(201).json({ status: 201 });
   } catch (error) {
-      res.status(401).json({status:401,error})
+    res.status(401).json({ status: 401, error });
   }
 });
-
-
-
-
-
-
 
 module.exports = router;
-
-

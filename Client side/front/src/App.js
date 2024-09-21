@@ -117,25 +117,20 @@ function App() {
             <Route path="/fpt" element={<ForgotPassword />} />
             <Route path="/fps" element={<SutdentForgotPassword />} />
 
-
-<Route element={<ProtectedRoutes/>}>
-
-
-
-            <Route path="/addresult" element={<UploadForm />} />
-            <Route path="/hall" element={<Hallallocation />} />
-            <Route path="/error" element={<Error />} />
-            {/* <Route path='/payment' element={<AddPayment />} />              */}
-            <Route path="/Student_Courses" element={<WatchCourses />} />
-            <Route path="/Student_Courses/Course/:id" element={<Course />} />
-            <Route
-              path="/Student_Courses/Course/payment/:id"
-              element={<AddPayment />}
-            />
-            <Route path="/allCourse/editCourse" element={<EditCourse />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/addresult" element={<UploadForm />} />
+              <Route path="/hall" element={<Hallallocation />} />
+              <Route path="/error" element={<Error />} />
+              {/* <Route path='/payment' element={<AddPayment />} />              */}
+              <Route path="/Student_Courses" element={<WatchCourses />} />
+              <Route path="/Student_Courses/Course/:id" element={<Course />} />
+              <Route
+                path="/Student_Courses/Course/payment/:id"
+                element={<AddPayment />}
+              />
+              <Route path="/allCourse/editCourse" element={<EditCourse />} />
             </Route>
           </Routes>
-          
         </>
       ) : (
         <Box

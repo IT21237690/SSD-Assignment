@@ -1,11 +1,10 @@
 body {
-  background-color: #f9f9fa
+  background-color: #f9f9fa;
 }
 
 .padding {
-  padding: 3rem !important
+  padding: 3rem !important;
 }
-
 
 .user-card-full {
   overflow: hidden;
@@ -18,8 +17,8 @@ body {
 }
 .card {
   border-radius: 5px;
-  -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
-  box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+  -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+  box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
   border: none;
   margin-bottom: 30px;
   width: 100%;
@@ -39,7 +38,13 @@ body {
 }
 
 .bg-c-lite-green {
-      background: -webkit-gradient(linear, left top, right top, from(#639cf2), to(#2f4ac5));
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(#639cf2),
+    to(#2f4ac5)
+  );
   background: linear-gradient(to right, #755aee, #908ccc);
 }
 
@@ -61,8 +66,6 @@ body {
   border-radius: 5px;
 }
 
-
-
 h6 {
   font-size: 14px;
 }
@@ -72,10 +75,10 @@ h6 {
   width: 100%;
 }
 
-@media only screen and (min-width: 1400px){
-p {
-  font-size: 14px;
-}
+@media only screen and (min-width: 1400px) {
+  p {
+    font-size: 14px;
+  }
 }
 
 .card-block {
@@ -110,13 +113,12 @@ p {
 
 .b-b-default {
   border-bottom: 1px solid #e0e0e0;
-   width: 100%;
+  width: 100%;
 }
 
 .f-w-600 {
   font-weight: 600;
   width: 100%;
-  
 }
 
 .m-b-20 {
@@ -139,7 +141,3 @@ p {
 .m-t-40 {
   margin-top: 20px;
 }
-
-
-
-
