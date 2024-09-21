@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useContext } from "react";
-import { LoginContext } from "../components/ContextProvider/Context"; // adjust the import path if needed
+import { LoginContext } from "../components/ContextProvider/Context"; 
 
 const ProtectedRoutes = () => {
   const { logindata } = useContext(LoginContext); // Fetch the user login data from context
