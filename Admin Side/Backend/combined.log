@@ -1,0 +1,54 @@
+2024-09-18 23:08:40 [32minfo[39m: Server is up and running on port number: 8070
+2024-09-18 23:08:42 [32minfo[39m: Mongodb Connection Success!
+2024-09-18 23:16:52 [32minfo[39m: Server is up and running on port number: 8070
+2024-09-18 23:16:53 [32minfo[39m: Mongodb Connection Success!
+2024-09-18 23:16:59 [32minfo[39m: Server is up and running on port number: 8070
+2024-09-18 23:17:00 [32minfo[39m: Mongodb Connection Success!
+2024-09-18 23:21:07 [32minfo[39m: Server is up and running on port number: 8070
+2024-09-18 23:21:08 [32minfo[39m: Mongodb Connection Success!
+2024-09-18 23:21:26 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:26 +0000] "GET /student/ HTTP/1.1" 200 14988 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:26 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:26 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:29 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:29 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:29 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:29 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:32 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:32 +0000] "GET /student/get/66e6e6e896bd36671e28d195 HTTP/1.1" 200 2274 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:32 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:32 +0000] "GET /student/get/66e6e6e896bd36671e28d195 HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:43 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:43 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:43 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:43 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:21:44 [32minfo[39m: ::1 - - [18/Sep/2024:17:51:44 +0000] "DELETE /student/delete/66e812c3e2ac9d4da9775ea8 HTTP/1.1" 200 38 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:23:33 [32minfo[39m: Server is up and running on port number: 8070
+2024-09-18 23:23:34 [32minfo[39m: Mongodb Connection Success!
+2024-09-18 23:24:02 [32minfo[39m: Server is up and running on port number: 8070
+2024-09-18 23:24:03 [32minfo[39m: Mongodb Connection Success!
+2024-09-18 23:24:07 [32minfo[39m: ::1 - - [18/Sep/2024:17:54:07 +0000] "GET /student/ HTTP/1.1" - - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:24:08 [32minfo[39m: ::1 - - [18/Sep/2024:17:54:08 +0000] "GET /student/ HTTP/1.1" 200 12935 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:24:08 [32minfo[39m: ::1 - - [18/Sep/2024:17:54:08 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-18 23:24:09 [32minfo[39m: ::1 - - [18/Sep/2024:17:54:09 +0000] "DELETE /student/delete/66e6e6e896bd36671e28d195 HTTP/1.1" 200 38 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+2024-09-21 21:17:44 [32minfo[39m: Server is up and running on port number: 8070
+2024-09-21 21:17:46 [32minfo[39m: Mongodb Connection Success!
+2024-09-21 21:18:02 [32minfo[39m: ::1 - - [21/Sep/2024:15:48:02 +0000] "GET /student/ HTTP/1.1" 200 10660 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 21:18:02 [32minfo[39m: ::1 - - [21/Sep/2024:15:48:02 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 21:18:43 [32minfo[39m: ::1 - - [21/Sep/2024:15:48:43 +0000] "GET /student/ HTTP/1.1" 200 10660 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 21:18:43 [32minfo[39m: ::1 - - [21/Sep/2024:15:48:43 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 21:30:15 [32minfo[39m: ::1 - - [21/Sep/2024:16:00:15 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 21:30:15 [32minfo[39m: ::1 - - [21/Sep/2024:16:00:15 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 21:41:36 [32minfo[39m: ::1 - - [21/Sep/2024:16:11:36 +0000] "GET /student/ HTTP/1.1" 200 10660 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 21:41:36 [32minfo[39m: ::1 - - [21/Sep/2024:16:11:36 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:30:07 [32minfo[39m: ::1 - - [21/Sep/2024:17:00:07 +0000] "GET /student/ HTTP/1.1" 200 14231 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:30:07 [32minfo[39m: ::1 - - [21/Sep/2024:17:00:07 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:35:04 [32minfo[39m: ::1 - - [21/Sep/2024:17:05:04 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:35:04 [32minfo[39m: ::1 - - [21/Sep/2024:17:05:04 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:35:15 [32minfo[39m: ::1 - - [21/Sep/2024:17:05:15 +0000] "GET /staff/get HTTP/1.1" 200 468 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:35:15 [32minfo[39m: ::1 - - [21/Sep/2024:17:05:15 +0000] "GET /staff/get HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:35:27 [32minfo[39m: ::1 - - [21/Sep/2024:17:05:27 +0000] "GET /staff/get HTTP/1.1" - - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:43:17 [32minfo[39m: ::1 - - [21/Sep/2024:17:13:17 +0000] "GET /student/ HTTP/1.1" - - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:43:18 [32minfo[39m: ::1 - - [21/Sep/2024:17:13:18 +0000] "GET /student/ HTTP/1.1" 200 14231 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:43:18 [32minfo[39m: ::1 - - [21/Sep/2024:17:13:18 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:43:21 [32minfo[39m: ::1 - - [21/Sep/2024:17:13:21 +0000] "GET /student/ HTTP/1.1" - - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:43:21 [32minfo[39m: ::1 - - [21/Sep/2024:17:13:21 +0000] "GET /student/ HTTP/1.1" 200 14231 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:43:21 [32minfo[39m: ::1 - - [21/Sep/2024:17:13:21 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:44:49 [32minfo[39m: ::1 - - [21/Sep/2024:17:14:49 +0000] "GET /student/ HTTP/1.1" - - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:44:49 [32minfo[39m: ::1 - - [21/Sep/2024:17:14:49 +0000] "GET /student/ HTTP/1.1" 200 14231 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:44:49 [32minfo[39m: ::1 - - [21/Sep/2024:17:14:49 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:44:53 [32minfo[39m: ::1 - - [21/Sep/2024:17:14:53 +0000] "GET /student/ HTTP/1.1" - - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:44:53 [32minfo[39m: ::1 - - [21/Sep/2024:17:14:53 +0000] "GET /student/ HTTP/1.1" 200 14231 "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+2024-09-21 22:44:53 [32minfo[39m: ::1 - - [21/Sep/2024:17:14:53 +0000] "GET /student/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
