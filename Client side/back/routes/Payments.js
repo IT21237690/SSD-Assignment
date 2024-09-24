@@ -1,7 +1,15 @@
 const router = require("express").Router();
 let payment = require("../models/paymentModel");
+const rateLimit = require("express-rate-limit");
 
-router.route("/add").post((req, res) => {
+// Define a rate limit rule
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute in milliseconds
+  max: 5, // 5 requests per IP per 1 min
+  message: "Too many requests from this IP, please try again later.",
+});
+
+router.route("/add").post(limiter, (req, res) => {
   const name = req.body.name;
   const cardNumber = Number(req.body.cardNumber);
   const ExpYear = Number(req.body.ExpYear);
@@ -34,7 +42,7 @@ router.route("/add").post((req, res) => {
     });
 });
 
-router.route("/").get((req, res) => {
+router.route("/").get(limiter, (req, res) => {
   payment
     .find()
     .then((payment) => {
@@ -45,7 +53,7 @@ router.route("/").get((req, res) => {
     });
 });
 
-router.route("/:id").get(async (req, res) => {
+router.route("/:id").get(limiter, async (req, res) => {
   let paymentID = req.params.id;
 
   const details = await payment
@@ -62,7 +70,7 @@ router.route("/:id").get(async (req, res) => {
 });
 
 //update
-router.route("/update/:id").put(async (req, res) => {
+router.route("/update/:id").put(limiter, async (req, res) => {
   let paymentID = req.params.id;
   const {
     name,
@@ -99,7 +107,7 @@ router.route("/update/:id").put(async (req, res) => {
     });
 });
 
-router.route("/delete/:id").delete(async (req, res) => {
+router.route("/delete/:id").delete(limiter, async (req, res) => {
   let paymentID = req.params.id;
 
   await payment
@@ -109,12 +117,10 @@ router.route("/delete/:id").delete(async (req, res) => {
     })
     .catch((err) => {
       console.log(err.message);
-      res
-        .status(500)
-        .send({
-          status: "Error with delete payment details",
-          error: err.message,
-        });
+      res.status(500).send({
+        status: "Error with delete payment details",
+        error: err.message,
+      });
     });
 });
 
