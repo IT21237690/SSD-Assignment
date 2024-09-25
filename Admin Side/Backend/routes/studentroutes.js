@@ -3,9 +3,14 @@ let Student = require("../models/Student");
 const PDFDocument = require("pdfkit-table");
 
 
+const rateLimit = require("express-rate-limit");
 
-  
-
+// Define a rate limit rule
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute in milliseconds
+    max: 1, // Limit each IP to 100 requests per windowMs
+    message: "Too many requests from this IP, please try again later."
+});
 
 
 router.route("/add").post((req,res)=>{
@@ -36,13 +41,17 @@ router.route("/add").post((req,res)=>{
 })
 
 
-router.route("/").get((req,res)=>{
-    Student.find().then((Student)=>{
-        res.json(Student)
-    }).catch((err)=>{
-        console.log(err)
-    })
-})
+// Apply the rate limiter to your route
+router.route("/").get(limiter, (req, res) => {
+  Student.find()
+      .then((Student) => {
+          res.json(Student);
+      })
+      .catch((err) => {
+          console.log(err);
+      });
+});
+
 
 
 router.get("/get/:id", async (req, res) => {
