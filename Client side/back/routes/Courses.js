@@ -1,9 +1,17 @@
 const router = require("express").Router();
 let course = require("../models/CoursesModel");
 const PDFDocument = require("pdfkit-table");
+const rateLimit = require("express-rate-limit");
+
+// Define a rate limit rule
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute in milliseconds
+  max: 5, // 5 requests per IP per 1 min
+  message: "Too many requests from this IP, please try again later.",
+});
 
 //create
-router.route("/add").post((req, res) => {
+router.route("/add").post(limiter, (req, res) => {
   const courseID = req.body.courseID;
   const courseName = req.body.courseName;
   const teacherName = req.body.teacherName;
@@ -35,7 +43,7 @@ router.route("/add").post((req, res) => {
 });
 
 //report
-router.get("/reporting", async (_req, res, next) => {
+router.get("/reporting", limiter, async (_req, res, next) => {
   try {
     const courses = await course.find({}).sort({ CreatedAt: -1 });
     // start pdf document
@@ -101,7 +109,7 @@ router.get("/reporting", async (_req, res, next) => {
 });
 
 //get details about all
-router.route("/").get((req, res) => {
+router.route("/").get(limiter, (req, res) => {
   course
     .find()
     .then((course) => {
@@ -113,7 +121,7 @@ router.route("/").get((req, res) => {
 });
 
 //get details about one
-router.get("/:id", async (req, res) => {
+router.get("/:id", limiter, async (req, res) => {
   let id = req.params.id;
 
   const details = await course
@@ -130,7 +138,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //get details about one part 02
-router.get("/get/:id", async (req, res) => {
+router.get("/get/:id", limiter, async (req, res) => {
   try {
     console.log(req.params);
     const { id } = req.params;
@@ -144,7 +152,7 @@ router.get("/get/:id", async (req, res) => {
 });
 
 //search function
-router.route("/search/:id").get(async (req, res) => {
+router.route("/search/:id").get(limiter, async (req, res) => {
   const query = req.params.q;
   course.findOne({ courseID: { courseId: query } }, (err, results) => {
     if (err) {
@@ -157,7 +165,7 @@ router.route("/search/:id").get(async (req, res) => {
 });
 
 //update
-router.route("/update/:id").put(async (req, res) => {
+router.route("/update/:id").put(limiter, async (req, res) => {
   let cID = req.params.courseID;
   const {
     courseID,
@@ -193,7 +201,7 @@ router.route("/update/:id").put(async (req, res) => {
 });
 
 //delete
-router.route("/delete/:id").delete(async (req, res) => {
+router.route("/delete/:id").delete(limiter, async (req, res) => {
   let courseID = req.params.courseID;
 
   await course
@@ -203,12 +211,10 @@ router.route("/delete/:id").delete(async (req, res) => {
     })
     .catch((err) => {
       console.log(err.message);
-      res
-        .status(500)
-        .send({
-          status: "Error with delete course details",
-          error: err.message,
-        });
+      res.status(500).send({
+        status: "Error with delete course details",
+        error: err.message,
+      });
     });
 });
 
