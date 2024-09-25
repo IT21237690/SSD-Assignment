@@ -1,0 +1,4 @@
+.toast {
+    position: fixed;
+    z-index: 999;
+  }

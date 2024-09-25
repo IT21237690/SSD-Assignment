@@ -1,0 +1,51 @@
+.category-tile {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 30px;
+}
+
+.card {
+    border: none !important;
+    width: 15rem !important;
+}
+img.card-img-top.product-preview-img {
+    border-radius: 10px;
+}
+
+.category-tile:hover {
+    transform: scale(1.05);
+}
+
+.sale__banner--container img {
+    max-width: 1200px;
+    display: block;
+    margin: 0 auto;
+}
+
+.rounded-button {
+    background-color: #76B666;
+    color: white;
+    border-color: #ffffff;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    padding: 15px 25px; 
+ 
+  }
+  
+  .rounded-button:hover {
+    background-color: rgb(130, 201, 145);
+    border-color: rgb(134, 217, 152);
+    color: white;
+    
+  }
+  
+  

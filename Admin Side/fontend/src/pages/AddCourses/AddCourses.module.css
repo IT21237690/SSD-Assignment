@@ -1,0 +1,8 @@
+.contentArea{
+    width: 50%;
+    margin: auto;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

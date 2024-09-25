@@ -1,0 +1,42 @@
+.AllContent {
+    width: 75%;
+    float: right;
+}
+
+.table_M {
+    width: 75%;
+    float: right;
+}
+
+.outer {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    border: 1px solid black;
+}
+
+.inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 200px;
+    height: 100px;
+    background-color: yellow;
+}
+
+.container{
+    display: flex;
+}
+
+.table{
+    justify-content: center;
+    background-color: brown;
+}
+.table_conatiner{
+    width: 100%;
+    height: 500px;
+    display: flex;
+}
