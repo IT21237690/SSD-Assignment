@@ -1,4 +1,5 @@
 const express = require("express");
+const { body, validationResult } = require("express-validator");
 const router = express.Router();
 const Inventory = require("../models/inventory");
 const emailSendSchema = require("../models/emailSend");
@@ -7,7 +8,7 @@ const multer = require("multer");
 const fs = require("fs/promises");
 const PDFDocument = require("pdfkit-table");
 
-// store the image
+// Store the image
 const storage = multer.diskStorage({
   destination: function (_req, _file, cb) {
     cb(null, path.join(__dirname, "../images"));
@@ -22,7 +23,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single("file");
 
-//convert date to IST
+// Convert date to IST
 function convertToIST(utcDateStr) {
   const date = new Date(utcDateStr);
   const istOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds
@@ -30,7 +31,7 @@ function convertToIST(utcDateStr) {
   const year = istDate.getUTCFullYear();
   const month = ("0" + (istDate.getUTCMonth() + 1)).slice(-2); // Add leading zero if needed
   const day = ("0" + istDate.getUTCDate()).slice(-2); // Add leading zero if needed
-  return `${year}-${month}-${day}`; //YYYY-MM-DD
+  return `${year}-${month}-${day}`; // YYYY-MM-DD
 }
 
 // @route   GET api/inventory
@@ -45,18 +46,41 @@ router.get("/", async (_req, res, next) => {
   }
 });
 
-
 // @route   POST api/inventory
 // @desc    Add new inventory
-router.post("/", async (req, res, next) => {
-  try {
-    upload(req, res, async (err) => {
+router.post(
+  "/",
+  upload,
+  [
+    body("name")
+      .isString()
+      .withMessage("Name must be a string")
+      .trim()
+      .escape(),
+    body("quantity")
+      .isNumeric()
+      .withMessage("Quantity must be a number")
+      .toInt(),
+    body("price")
+      .isNumeric()
+      .withMessage("Price must be a number")
+      .toFloat(),
+    body("dateOfPurchase")
+      .isDate()
+      .withMessage("Date of Purchase must be a valid date")
+      .toDate(),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
       const { name, quantity, price, dateOfPurchase } = req.body;
       const file = req.file;
-      if (err) {
-        throw new Error(err);
-      }
-      // check if inventory already exists
+
+      // Check if inventory already exists
       const isInventoryAvailable = await Inventory.findOne({ name });
       if (isInventoryAvailable) {
         const error = new Error("Inventory already exists");
@@ -73,12 +97,13 @@ router.post("/", async (req, res, next) => {
       });
       await inventory.save();
       return res.status(200).send("Inventory added successfully");
-    });
-  } catch (err) {
-    console.error(err.message);
-    next(err);
+    } catch (err) {
+      console.error(err.message);
+      next(err);
+    }
   }
-});
+);
+
 // @route   POST api/inventory/emailSent
 // @desc    set email sent date
 router.post("/emailSent", async (req, res, next) => {
@@ -111,6 +136,7 @@ router.post("/emailSent", async (req, res, next) => {
     next(err);
   }
 });
+
 // @route   POST api/inventory/emailSentDates
 // @desc    get email sent dates
 router.post("/emailSentDates", async (req, res, next) => {
@@ -164,7 +190,7 @@ router.get("/reporting", async (_req, res, next) => {
     let doc = new PDFDocument({ margin: 30, size: "A4" });
 
     if (!inventories.length) {
-      const error = new Error("No Inventoris exists");
+      const error = new Error("No Inventories exist");
       error.status = 404;
       throw error;
     }
@@ -217,7 +243,7 @@ router.get("/reporting", async (_req, res, next) => {
   }
 });
 
-// @route   get api/inventory/:id
+// @route   GET api/inventory/:id
 // @desc    Get inventory by ID
 router.get("/:id", async (req, res, next) => {
   try {
@@ -238,58 +264,74 @@ router.get("/:id", async (req, res, next) => {
 
 // @route   PUT api/inventory/:id
 // @desc    Update inventory
-router.put("/:id", async (req, res, next) => {
-  try {
-    upload(req, res, async (err) => {
+router.put(
+  "/:id",
+  upload,
+  [
+    body("name")
+      .optional()
+      .isString()
+      .withMessage("Name must be a string")
+      .trim()
+      .escape(),
+    body("quantity")
+      .optional()
+      .isNumeric()
+      .withMessage("Quantity must be a number")
+      .toInt(),
+    body("price")
+      .optional()
+      .isNumeric()
+      .withMessage("Price must be a number")
+      .toFloat(),
+    body("dateOfPurchase")
+      .optional()
+      .isDate()
+      .withMessage("Date of Purchase must be a valid date")
+      .toDate(),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
       const { name, quantity, price, image, dateOfPurchase, upInitQty } =
         req.body;
       const file = req.file;
-      if (err) {
-        throw new Error(err);
-      }
 
-      if (file && image) {
-        const filePath = path.join(__dirname, `../images/${image}`);
-        // Check if the file exists before trying to delete it
-        try {
-          if (await fs.access(filePath)) {
-            // Delete the file
-            await fs.unlink(filePath);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      const invObj = {
-        name,
-        image: file ? file.filename : image ? image : "",
-        quantity,
-        price,
-        dateOfPurchase,
-      };
-      //update the initialQuantity
-      if (upInitQty == "true") {
-        invObj.initialQuantity = quantity;
-      }
-      const document = await Inventory.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          ...invObj,
-        },
-        { new: true }
-      );
-      if (!document) {
+      const inventory = await Inventory.findById(req.params.id);
+      if (!inventory) {
         const error = new Error("Inventory not found");
         error.status = 404;
         throw error;
       }
-      res.status(200).send("Inventory updated successfully");
-    });
-  } catch (err) {
-    console.error(err.message);
-    next(err);
+
+      // Check if the name is being updated and if the new name already exists
+      if (name && name !== inventory.name) {
+        const isInventoryAvailable = await Inventory.findOne({ name });
+        if (isInventoryAvailable) {
+          const error = new Error("Inventory already exists");
+          error.status = 404;
+          throw error;
+        }
+      }
+
+      inventory.name = name || inventory.name;
+      inventory.image = file ? file.filename : inventory.image;
+      inventory.quantity = quantity || inventory.quantity;
+      inventory.price = price || inventory.price;
+      inventory.dateOfPurchase = dateOfPurchase || inventory.dateOfPurchase;
+
+      await inventory.save();
+      return res.status(200).send("Inventory updated successfully");
+    } catch (err) {
+      console.error(err.message);
+      next(err);
+    }
   }
-});
+);
 
 // @route   DELETE api/inventory/:id
 // @desc    Delete inventory
@@ -301,21 +343,9 @@ router.delete("/:id", async (req, res, next) => {
       error.status = 404;
       throw error;
     }
-    if (inventory.image) {
-      const filePath = path.join(__dirname, `../images/${inventory.image}`);
-      // Check if the file exists before trying to delete it
-      try {
-        if (await fs.access(filePath)) {
-          // Delete the file
-          await fs.unlink(filePath);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
 
-    await Inventory.findOneAndDelete({ _id: req.params.id });
-    res.status(200).send("Inventory deleted successfully");
+    await Inventory.findByIdAndRemove(req.params.id);
+    res.send("Inventory deleted successfully");
   } catch (err) {
     console.error(err.message);
     next(err);

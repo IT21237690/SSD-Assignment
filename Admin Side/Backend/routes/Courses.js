@@ -1,17 +1,25 @@
 const router = require("express").Router();
 let course = require("../models/CoursesModel");
 const PDFDocument = require("pdfkit-table");
+const { body, param, validationResult } = require('express-validator');
 
-//create
-router.route("/add").post((req, res) => {
-  const courseID = req.body.courseID;
-  const courseName = req.body.courseName;
-  const teacherName = req.body.teacherName;
-  const grade = Number(req.body.grade);
-  const startingTime = req.body.startingTime;
-  const date = req.body.date;
-  const timeDuration = Number(req.body.timeDuration);
-  const fee = Number(req.body.fee);
+// Create course with validation and sanitization
+router.route("/add").post([
+  body('courseID').isString().trim().escape().notEmpty().withMessage('Course ID is required'),
+  body('courseName').isString().trim().escape().notEmpty().withMessage('Course Name is required'),
+  body('teacherName').isString().trim().escape().notEmpty().withMessage('Teacher Name is required'),
+  body('grade').isNumeric().withMessage('Grade must be a number'),
+  body('startingTime').isString().trim().escape().notEmpty().withMessage('Starting Time is required'),
+  body('date').isString().trim().escape().notEmpty().withMessage('Date is required'),
+  body('timeDuration').isNumeric().withMessage('Time Duration must be a number'),
+  body('fee').isNumeric().withMessage('Fee must be a number'),
+], (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { courseID, courseName, teacherName, grade, startingTime, date, timeDuration, fee } = req.body;
 
   const newCourse = new course({
     courseID,
@@ -22,20 +30,21 @@ router.route("/add").post((req, res) => {
     date,
     timeDuration,
     fee
-  })
+  });
 
   newCourse.save().then(() => {
-    res.json("Course Added")
+    res.json("Course Added");
   }).catch((err) => {
     console.log(err);
-  })
-})
+    res.status(500).send("Error adding course");
+  });
+});
 
-//report 
+// Report 
 router.get("/reporting", async (_req, res, next) => {
   try {
     const courses = await course.find({}).sort({ CreatedAt: -1 });
-    // start pdf document
+    // Start PDF document
     let doc = new PDFDocument({ margin: 30, size: "A4" });
     // Simple Table with Array
     if (!courses.length) {
@@ -52,21 +61,18 @@ router.get("/reporting", async (_req, res, next) => {
       "Date",
       "Time Duration",
       "Fee",
-
     ];
-    const rows = [];
-    courses.map((i) => {
-      rows.push([
-        i.courseID,
-        i.courseName,
-        i.teacherName,
-        i.grade,
-        i.startingTime,
-        i.date,
-        i.timeDuration,
-        i.fee,
-      ]);
-    });    
+    const rows = courses.map(i => [
+      i.courseID,
+      i.courseName,
+      i.teacherName,
+      i.grade,
+      i.startingTime,
+      i.date,
+      i.timeDuration,
+      i.fee,
+    ]);
+
     const tableArray = {
       headers: headers,
       rows: rows,
@@ -75,11 +81,11 @@ router.get("/reporting", async (_req, res, next) => {
       prepareHeader: () => doc.font("Helvetica-Bold").fontSize(8),
       prepareRow: (_row, indexColumn, indexRow, rectRow) => {
         doc.font("Helvetica").fontSize(8);
-        indexColumn === 0 &&
-          doc.addBackground(rectRow, indexRow % 2 ? "blue" : "green", 0.15);
+        indexColumn === 0 && doc.addBackground(rectRow, indexRow % 2 ? "blue" : "green", 0.15);
       },
     });
-    // create a buffer from the PDF document
+
+    // Create a buffer from the PDF document
     let chunks = [];
     doc.on('data', (chunk) => {
       chunks.push(chunk);
@@ -90,7 +96,7 @@ router.get("/reporting", async (_req, res, next) => {
       res.setHeader('Content-Disposition', 'attachment; filename="myfile.pdf"');
       res.send(pdfBlob);
     });
-    // done
+    // Done
     doc.end();
   } catch (err) {
     console.error(err.message);
@@ -98,57 +104,51 @@ router.get("/reporting", async (_req, res, next) => {
   }
 });
 
-
-//get details about all
+// Get details about all courses
 router.route("/").get((req, res) => {
-  course.find().then((course) => {
-    res.json(course)
+  course.find().then((courses) => {
+    res.json(courses);
   }).catch((err) => {
-    console.log(err)
-  })
-})
+    console.log(err);
+    res.status(500).send("Error fetching courses");
+  });
+});
 
-//get details about one
-router.get("/:id", async (req, res) => {
+// Get details about one course with validation
+router.get("/:id", [
+  param('id').isMongoId().withMessage('Invalid Course ID format')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
   try {
-  let id = req.params.id;
-
-  let details = await course.findById(id)
-  if (!details) {
-    const error = new Error(" course not found");
-    error.status = 404;
-    throw error;
-  }
+    let id = req.params.id;
+    let details = await course.findById(id);
+    if (!details) {
+      const error = new Error("Course not found");
+      error.status = 404;
+      throw error;
+    }
     res.json(details);
-  }catch(err) {
+  } catch (err) {
     console.log(err.message);
-    res.status(500).send({ status: "Error with get details", error: err.message });
+    res.status(500).send({ status: "Error with getting details", error: err.message });
+  }
+});
+
+// Search function with validation
+router.route("/search/:id").get([
+  param('id').isString().trim().escape().notEmpty().withMessage('Course ID is required')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
 
-
-})
-
-//get details about one part 02
-// router.route("/get/:id").get(async (req, res) => {
-//   try {
-//     console.log(req.params);
-//     const { id } = req.params;
-
-//     const courseSingle = await course.findOne({ courseID: id });
-//     console.log(courseSingle);
-//     res.status(201).json(courseSingle)
-
-//   } catch (error) {
-//     res.status(404).json(error)
-//   }
-// })
-
-
-//search function
-router.route("/search/:id").get(async (req, res) => {
-  const query = req.params.q;
-  course.findOne({ courseID: { courseId: query } }, (err, results) => {
+  const query = req.params.id;
+  course.findOne({ courseID: query }, (err, results) => {
     if (err) {
       console.log(err);
       res.status(500).send('Error searching for result');
@@ -158,11 +158,25 @@ router.route("/search/:id").get(async (req, res) => {
   });
 });
 
+// Update course with validation
+router.route("/update/:id").put([
+  param('id').isMongoId().withMessage('Invalid Course ID format'),
+  body('courseID').isString().trim().escape().notEmpty().withMessage('Course ID is required'),
+  body('courseName').isString().trim().escape().notEmpty().withMessage('Course Name is required'),
+  body('teacherName').isString().trim().escape().notEmpty().withMessage('Teacher Name is required'),
+  body('grade').isNumeric().withMessage('Grade must be a number'),
+  body('startingTime').isString().trim().escape().notEmpty().withMessage('Starting Time is required'),
+  body('date').isString().trim().escape().notEmpty().withMessage('Date is required'),
+  body('timeDuration').isNumeric().withMessage('Time Duration must be a number'),
+  body('fee').isNumeric().withMessage('Fee must be a number'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-//update
-router.route("/update/:id").put(async (req, res) => {
-  let id = req.params.id
-  const { courseID, courseName, teacherName, grade, startingTime, date, timeDuration, fee } = req.body
+  let id = req.params.id;
+  const { courseID, courseName, teacherName, grade, startingTime, date, timeDuration, fee } = req.body;
 
   const updateCourse = {
     courseID,
@@ -173,26 +187,33 @@ router.route("/update/:id").put(async (req, res) => {
     date,
     timeDuration,
     fee
-  }
+  };
 
-  const update = await course.findByIdAndUpdate(id, updateCourse).then(() => {
-    res.status(200).send({ status: "Course Details updated" })
+  await course.findByIdAndUpdate(id, updateCourse).then(() => {
+    res.status(200).send({ status: "Course Details updated" });
   }).catch((err) => {
     console.log(err);
     res.status(500).send({ status: "Error with updating details" });
-  })
-})
+  });
+});
 
-//delete
-router.route("/delete/:id").delete(async (req, res) => {
-  let courseID = req.params.courseID;
+// Delete course with validation
+router.route("/delete/:id").delete([
+  param('id').isMongoId().withMessage('Invalid Course ID format')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-  await course.findOneAndDelete(courseID).then(() => {
+  let courseID = req.params.id;
+
+  await course.findOneAndDelete({ _id: courseID }).then(() => {
     res.status(200).send({ status: "Course deleted" });
   }).catch((err) => {
     console.log(err.message);
-    res.status(500).send({ status: "Error with delete course details", error: err.message });
-  })
-})
+    res.status(500).send({ status: "Error with deleting course details", error: err.message });
+  });
+});
 
 module.exports = router;
