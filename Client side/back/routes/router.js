@@ -9,12 +9,18 @@ const QRCode = require("qrcode");
 const moment = require("moment");
 const qr = require("qr-image");
 const dotenv = require("dotenv");
-
 const keysecret = process.env.SECRET_KEY;
+const rateLimit = require("express-rate-limit");
 
+// Define a rate limit rule
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute in milliseconds
+  max: 5, // 5 requests per IP per 1 min
+  message: "Too many requests from this IP, please try again later.",
+});
 // for user registration
 
-router.post("/register", async (req, res) => {
+router.post("/register", limiter, async (req, res) => {
   const {
     name,
     address,
@@ -85,7 +91,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/forgot-password", async (req, res) => {
+router.post("/forgot-password", limiter, async (req, res) => {
   const { email, answer, password } = req.body;
 
   const userEmail = email;
@@ -125,7 +131,7 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
-router.get("/student/:email/qrcode", async (req, res) => {
+router.get("/student/:email/qrcode", limiter, async (req, res) => {
   const email = req.params.email;
   try {
     const user = await studentdb.findOne({ email: email });
@@ -147,7 +153,7 @@ router.get("/student/:email/qrcode", async (req, res) => {
 
 // user Login
 
-router.post("/login", async (req, res) => {
+router.post("/login", limiter, async (req, res) => {
   // console.log(req.body);
 
   const { email, password } = req.body;
@@ -188,7 +194,7 @@ router.post("/login", async (req, res) => {
 });
 
 // user valid
-router.get("/validuser", authenticate, async (req, res) => {
+router.get("/validuser", authenticate, limiter, async (req, res) => {
   try {
     const ValidUserOne = await studentdb.findOne({ _id: req.userId });
     res.status(201).json({ status: 201, ValidUserOne });
@@ -199,7 +205,7 @@ router.get("/validuser", authenticate, async (req, res) => {
 
 // user logout
 
-router.get("/logout", authenticate, async (req, res) => {
+router.get("/logout", authenticate, limiter, async (req, res) => {
   try {
     req.rootUser.tokens = req.rootUser.tokens.filter((curelem) => {
       return curelem.token !== req.token;
@@ -215,7 +221,7 @@ router.get("/logout", authenticate, async (req, res) => {
   }
 });
 
-router.get("/getuser/:id", authenticate, async (req, res) => {
+router.get("/getuser/:id", authenticate, limiter, async (req, res) => {
   try {
     const ValidUserOne = await studentdb.findOne({ _id: req.userId });
     res.status(201).json({ status: 201, ValidUserOne });
@@ -230,7 +236,7 @@ router.get("/getuser/:id", authenticate, async (req, res) => {
   }
 });
 
-router.patch("/updateuser/:email", async (req, res) => {
+router.patch("/updateuser/:email", limiter, async (req, res) => {
   try {
     const { email } = req.params.email;
 
@@ -245,7 +251,7 @@ router.patch("/updateuser/:email", async (req, res) => {
   }
 });
 
-router.get("/results/:name", async (req, res) => {
+router.get("/results/:name", limiter, async (req, res) => {
   try {
     const name = req.params.name;
     const result = await Results.findOne({ name });

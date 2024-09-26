@@ -3,11 +3,19 @@ const bcrypt = require("bcryptjs");
 const { Router } = require("express");
 const teacherdb = require("../models/teacherSchema");
 const teacherauth = require("../middleware/teacherauthentication");
+const rateLimit = require("express-rate-limit");
 
 // create a new router instance
 const router = Router();
 
-router.post("/forgot-password", async (req, res) => {
+// Define a rate limit rule
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute in milliseconds
+  max: 5, // 5 requests per IP per 1 min
+  message: "Too many requests from this IP, please try again later.",
+});
+
+router.post("/forgot-password", limiter, async (req, res) => {
   const { email, answer, password } = req.body;
 
   const userEmail = email;
@@ -47,7 +55,7 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
-router.post("/registerteacher", async (req, res) => {
+router.post("/registerteacher", limiter, async (req, res) => {
   const {
     name,
     nic,
@@ -97,7 +105,7 @@ router.post("/registerteacher", async (req, res) => {
   }
 });
 
-router.post("/Tlogin", async (req, res) => {
+router.post("/Tlogin", limiter, async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -141,7 +149,7 @@ router.post("/Tlogin", async (req, res) => {
   }
 });
 
-router.get("/validteacher", teacherauth, async (req, res) => {
+router.get("/validteacher", teacherauth, limiter, async (req, res) => {
   try {
     const Validteacher = await teacherdb.findOne({ _id: req.userId });
     res.status(201).json({ status: 201, Validteacher });
@@ -150,7 +158,7 @@ router.get("/validteacher", teacherauth, async (req, res) => {
   }
 });
 
-router.get("/getteacher/:id", teacherauth, async (req, res) => {
+router.get("/getteacher/:id", teacherauth, limiter, async (req, res) => {
   try {
     const Validteacher = await teacherdb.findOne({ _id: req.userId });
     res.status(201).json({ status: 201, Validteacher });
@@ -165,7 +173,7 @@ router.get("/getteacher/:id", teacherauth, async (req, res) => {
   }
 });
 
-router.get("/Tlogout", teacherauth, async (req, res) => {
+router.get("/Tlogout", teacherauth, limiter, async (req, res) => {
   try {
     req.rootUser.tokens = req.rootUser.tokens.filter((curelem) => {
       return curelem.token !== req.token;

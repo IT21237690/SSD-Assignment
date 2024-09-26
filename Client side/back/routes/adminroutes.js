@@ -1,9 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const Teacher = require("../models/teacherSchema");
+const rateLimit = require("express-rate-limit");
+
+// Define a rate limit rule
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute in milliseconds
+  max: 5, // 5 requests per IP per 1 min
+  message: "Too many requests from this IP, please try again later.",
+});
 
 // Admin approval request route
-router.patch("/approve/:teacherId", async (req, res) => {
+router.patch("/approve/:teacherId", limiter, async (req, res) => {
   try {
     const { teacherId } = req.params;
     // Update teacher's isAdminApproved field to true
@@ -21,7 +29,7 @@ router.patch("/approve/:teacherId", async (req, res) => {
   }
 });
 
-router.get("/teachers", async (req, res) => {
+router.get("/teachers", limiter, async (req, res) => {
   try {
     const teachers = await Teacher.find({ isAdminApproved: false });
     return res.status(200).json(teachers);

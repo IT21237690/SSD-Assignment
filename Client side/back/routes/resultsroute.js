@@ -3,10 +3,18 @@ let Results = require("../models/Results");
 const PDFDocument = require("pdfkit-table");
 const multer = require("multer");
 const fs = require("fs");
-
 const upload = multer({ dest: "uploads/" });
 
-router.post("/upload", upload.single("file"), (req, res) => {
+const rateLimit = require("express-rate-limit");
+
+// Define a rate limit rule
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute in milliseconds
+  max: 5, // 5 requests per IP per 1 min
+  message: "Too many requests from this IP, please try again later.",
+});
+
+router.post("/upload", upload.single("file"), limiter, (req, res) => {
   const file = req.file;
 
   if (!file) {
@@ -35,7 +43,7 @@ router.post("/upload", upload.single("file"), (req, res) => {
     });
 });
 
-router.get("/student/results/:name", async (req, res) => {
+router.get("/student/results/:name", limiter, async (req, res) => {
   try {
     const name = req.params.name;
     const results = await Results.find({ name }); // Retrieve all results for the given name
