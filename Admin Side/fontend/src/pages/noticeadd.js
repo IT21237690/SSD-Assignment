@@ -1,111 +1,181 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import validator from 'validator';
 
-export default function Addnotice(){
+export default function Addnotice() {
+  const [message, setMessage] = useState("");
+  const [mid, setMid] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [errors, setErrors] = useState({});
 
-    const [message,setMessage] = useState ("");
-    const [mid,setMid] = useState ("");
-    const [date,setDate] = useState ("");
-    const [time,setTime] = useState ("");
-    const [from,setFrom] = useState ("");
-    const [to,setTo] = useState ("");
+  const validateInputs = () => {
+    const newErrors = {};
 
-    function saveData(e){
-        e.preventDefault();
-
-        const noticeadding = {
-            message,
-            mid,
-            date,
-            time,
-            from,
-            to,
-        }
-
-        axios.post("http://localhost:8070/announcement/add",noticeadding).then(()=>{
-            alert("notice added")
-        }).catch((err)=>{
-            alert (err)
-
-        })
+    // Validate message
+    if (!message) {
+      newErrors.message = "Message is required.";
+    } else if (!validator.isLength(message, { min: 1, max: 255 })) {
+      newErrors.message = "Message must be between 1 and 255 characters.";
     }
-    
 
+    // Validate mid
+    if (!mid) {
+      newErrors.mid = "Mid is required.";
+    } else if (!validator.isAlphanumeric(mid)) {
+      newErrors.mid = "Mid must be alphanumeric.";
+    }
 
-    return(
-        <div>
-            <form onSubmit={saveData} className='container'>
+    // Validate date
+    if (!date) {
+      newErrors.date = "Date is required.";
+    } else if (!validator.isISO8601(date)) {
+      newErrors.date = "Date must be in YYYY-MM-DD format.";
+    }
 
-                <h1>Add message</h1>
+    // Validate time
+    if (!time) {
+      newErrors.time = "Time is required.";
+    }
 
-                <div class="mb-3">    
-                <label for="message">message</label>
-                <input type="text" class="form-control" id="message" 
-                onChange={(e)=>
-                    setMessage(e.target.value)
-                }
-                ></input>
-                </div>
+    // Validate from
+    if (!from) {
+      newErrors.from = "From is required.";
+    }
 
-                <div class="mb-3">    
-                <label for="mid" >mid</label>
-                <input ptype="text" class="form-control" id="mid" 
-                onChange={(e)=>
-                    setMid(e.target.value)
-                }
-                ></input>
-                </div>
+    // Validate to
+    if (!to) {
+      newErrors.to = "To is required.";
+    }
 
-                <div class="mb-3">    
-                <label for="date">date</label>
-                <input type="text" class="form-control" id="date" 
-                onChange={(e)=>
-                    setDate(e.target.value)
-                }
-                ></input>
-                </div>
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Returns true if no errors
+  };
 
-                <div class="mb-3">    
-                <label for="dob" >time</label> 
-                <input type="time" class="form-control" id="time"
-                onChange={(e)=>
-                    setTime(e.target.value)
-                }
-                ></input>
-                </div>
+  function saveData(e) {
+    e.preventDefault();
 
-                <div class="mb-3">    
-                <label for="from" >from</label>
-                <input type="text" class="form-control" id="from" 
-                onChange={(e)=>
-                    setFrom(e.target.value)
-                }
-                ></input>
-                </div>
+    if (!validateInputs()) {
+      return; // Stop the process if validation fails
+    }
 
+    const noticeadding = {
+      message: validator.escape(message),
+      mid: validator.escape(mid),
+      date,
+      time,
+      from: validator.escape(from),
+      to: validator.escape(to),
+    };
 
-                <div class="mb-3">    
-                <label for="to" >to</label>
-                <input type="text" class="form-control" id="to"
-                onChange={(e)=>
-                    setTo(e.target.value)
-                }
-                ></input>
-                </div>
+    axios.post("http://localhost:8070/announcement/add", noticeadding)
+      .then(() => {
+        alert("Notice added");
+        // Reset form fields after successful submission
+        setMessage("");
+        setMid("");
+        setDate("");
+        setTime("");
+        setFrom("");
+        setTo("");
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
 
-                <button type="submit" style={{backgroundColor: '#065A82',color: 'white'}} class="btn btn-primary">submit</button>
-                <div/>
-                <br></br>
-                {/* <button onclick="/displaynotice" type="submit" class="btn btn-primary">Back</button> */}
+  return (
+    <div>
+      <form onSubmit={saveData} className='container'>
+        <h1>Add Message</h1>
 
-                <Link to="/announcement/" style={{backgroundColor: '#1C7293',color: 'white'}} className="btn btn-primary">Back</Link>
-
-
-
-            </form>
-
+        <div className="mb-3">
+          <label htmlFor="message">Message</label>
+          <input
+            type="text"
+            className="form-control"
+            id="message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          {errors.message && <div className="text-danger">{errors.message}</div>}
         </div>
-    )
-}
 
+        <div className="mb-3">
+          <label htmlFor="mid">Mid</label>
+          <input
+            type="text"
+            className="form-control"
+            id="mid"
+            value={mid}
+            onChange={(e) => setMid(e.target.value)}
+          />
+          {errors.mid && <div className="text-danger">{errors.mid}</div>}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="date">Date</label>
+          <input
+            type="date"
+            className="form-control"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+          {errors.date && <div className="text-danger">{errors.date}</div>}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="time">Time</label>
+          <input
+            type="time"
+            className="form-control"
+            id="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+          />
+          {errors.time && <div className="text-danger">{errors.time}</div>}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="from">From</label>
+          <input
+            type="text"
+            className="form-control"
+            id="from"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          />
+          {errors.from && <div className="text-danger">{errors.from}</div>}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="to">To</label>
+          <input
+            type="text"
+            className="form-control"
+            id="to"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
+          {errors.to && <div className="text-danger">{errors.to}</div>}
+        </div>
+
+        <button
+          type="submit"
+          style={{ backgroundColor: '#065A82', color: 'white' }}
+          className="btn btn-primary"
+        >
+          Submit
+        </button>
+        <br />
+        <Link to="/announcement/" style={{ backgroundColor: '#1C7293', color: 'white' }} className="btn btn-primary">
+          Back
+        </Link>
+      </form>
+    </div>
+  );
+}

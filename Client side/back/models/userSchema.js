@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
 
   dob: {
-    type: String,
+    type: Date,
     required: true,
     trim: true,
   },
@@ -41,22 +41,19 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+
   email: {
     type: String,
     required: true,
     unique: true,
     validate(value) {
       if (!validator.isEmail(value)) {
-        throw new Error("not valid email");
+        throw new Error("Invalid email format");
       }
     },
   },
+
   password: {
-    type: String,
-    required: true,
-    minlength: 6,
-  },
-  cpassword: {
     type: String,
     required: true,
     minlength: 6,
@@ -73,7 +70,10 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
 
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
+  },
 
   qrCode: {
     type: String,
@@ -90,26 +90,23 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-// hash password
-
+// Hash the password before saving the user model
 userSchema.pre("save", async function (next) {
+  // Generate unique SID (Student ID)
   const year = moment(this.createdAt).format("YYYY");
   const month = moment(this.createdAt).format("MM");
-  const Sid = parseInt(
-    `${year}${month}${Math.random().toString().substr(2, 8)}`,
-    10,
-  );
+  const Sid = `${year}${month}${Math.random().toString().substr(2, 8)}`;
   this.Sid = Sid;
 
+  // Hash the password if it has been modified (or is new)
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 12);
-    this.cpassword = await bcrypt.hash(this.cpassword, 12);
   }
 
   next();
 });
 
-// token generate
+// Generate JWT token
 userSchema.methods.generateAuthtoken = async function () {
   try {
     let token23 = jwt.sign({ _id: this._id }, keysecret, {
@@ -120,13 +117,11 @@ userSchema.methods.generateAuthtoken = async function () {
     await this.save();
     return token23;
   } catch (error) {
-    res.status(422).json(error);
+    throw new Error("Error generating authentication token");
   }
 };
 
-// createing model
-const studentdb = new mongoose.model("students", userSchema);
+// Creating the model
+const studentdb = mongoose.model("students", userSchema);
 
 module.exports = studentdb;
-
-// if (this.isModified("password")) {    }
