@@ -3,6 +3,15 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 let Staff = require("../models/Staff");
 const PDFDocument = require("pdfkit-table");
+const rateLimit = require("express-rate-limit");
+
+
+// Define a rate limit rule
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute in milliseconds
+  max: 2, // 2 req per IP per 1 min
+  message: "Too many requests from this IP, please try again later."
+});
 
 // Validation and Sanitization rules
 const staffValidationRules = [
@@ -18,7 +27,7 @@ const staffValidationRules = [
 ];
 
 // Route to add new staff
-router.route("/add").post(staffValidationRules, (req, res) => {
+router.route("/add").post(staffValidationRules,limiter, (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -47,7 +56,7 @@ router.route("/add").post(staffValidationRules, (req, res) => {
 });
 
 // Route to get all staff members
-router.route("/get").get((req, res) => {
+router.route("/get").get(limiter,(req, res) => {
   Staff.find().then((staff) => {
     res.json(staff);
   }).catch((err) => {
@@ -117,7 +126,7 @@ router.get("/get/:id", async (req, res) => {
 });
 
 // Route to generate PDF report for staff
-router.get("/reportstaff", async (_req, res, next) => {
+router.get("/reportstaff",limiter, async (_req, res, next) => {
   try {
     const staff = await Staff.find({}).sort({ CreatedAt: -1 });
     // start pdf document

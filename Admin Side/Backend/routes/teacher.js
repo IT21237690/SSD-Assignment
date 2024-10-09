@@ -2,8 +2,16 @@ const routerTeacher = require("express").Router();
 const multer = require("multer");
 let Teacher = require("../models/Teacher");
 
+const rateLimit = require("express-rate-limit");
 
-routerTeacher.route("/addT").post((req,res)=>{
+// Define a rate limit rule
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute in milliseconds
+    max: 2, // 2 req per IP per 1 min
+    message: "Too many requests from this IP, please try again later."
+});
+
+routerTeacher.route("/addT").post(limiter,(req,res)=>{
 
     const name = req.body.name;
     const nic = req.body.nic;
@@ -40,7 +48,7 @@ routerTeacher.route("/addT").post((req,res)=>{
     })
 })
 
-routerTeacher.route("/T").get((req,res)=>{
+routerTeacher.route("/T").get(limiter,(req,res)=>{
     Teacher.find().then((teacher)=>{
         res.json(teacher)
     }).catch((err)=>{

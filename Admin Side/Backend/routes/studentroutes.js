@@ -8,12 +8,12 @@ const rateLimit = require("express-rate-limit");
 // Define a rate limit rule
 const limiter = rateLimit({
     windowMs: 60 * 1000, // 1 minute in milliseconds
-    max: 1, // Limit each IP to 100 requests per windowMs
+    max: 2, // 2 req per IP per 1 min
     message: "Too many requests from this IP, please try again later."
 });
 
 
-router.route("/add").post((req,res)=>{
+router.route("/add").post(limiter,(req,res)=>{
 
     const name = req.body.name;
     const address = req.body.address;
@@ -41,7 +41,7 @@ router.route("/add").post((req,res)=>{
 })
 
 
-// Apply the rate limiter to your route
+// Apply the rate limiter 
 router.route("/").get(limiter, (req, res) => {
   Student.find()
       .then((Student) => {
@@ -54,7 +54,7 @@ router.route("/").get(limiter, (req, res) => {
 
 
 
-router.get("/get/:id", async (req, res) => {
+router.get("/get/:id",limiter, async (req, res) => {
   try {
     let userId = req.params.id;
     let student = await Student.findById(userId);
@@ -108,7 +108,7 @@ router.route("/delete/:id").delete(async(req,res)=>{
 
 
 
-router.get("/search", (req, res) => {
+router.get("/search",limiter, (req, res) => {
     const searchQuery = req.query.name;
     Student.find({ name: new RegExp(searchQuery, "i") }, (err, student) => {
       if (err) {
@@ -121,7 +121,7 @@ router.get("/search", (req, res) => {
 
 
 
-  router.get("/report", async (_req, res, next) => {
+  router.get("/report", limiter,async (_req, res, next) => {
     try {
       const students = await Student.find({}).sort({ CreatedAt: -1 });
       // start pdf document
