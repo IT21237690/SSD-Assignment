@@ -26,7 +26,6 @@ const CreateInventory = () => {
       setVariant("Warning");
       setShow(true);
       return;
-        
     }
 
     // Sanitize and Validate name field
@@ -65,13 +64,38 @@ const CreateInventory = () => {
       return;
     }
 
+    // Validate and check file size
+    if (imageFile) {
+      const allowedTypes = ["image/jpeg", "image/png"];
+      const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+      if (!allowedTypes.includes(imageFile.type)) {
+        setMessage("Invalid file type! Please upload a JPG or PNG image.");
+        setVariant("Warning");
+        setShow(true);
+        return;
+      }
+
+      if (imageFile.size > maxSize) {
+        setMessage("File size exceeds the limit of 2 MB.");
+        setVariant("Warning");
+        setShow(true);
+        return;
+      }
+    } else {
+      setMessage("Please upload an image file.");
+      setVariant("Warning");
+      setShow(true);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", imageFile);
     formData.append("name", sanitizedName);
     formData.append("quantity", sanitizedQuantity);
     formData.append("price", sanitizedPrice);
     formData.append("dateOfPurchase", sanitizedDate);
-    
+
     axios
       .post("http://localhost:8070/api/inventory", formData)
       .then(() => {
@@ -101,13 +125,12 @@ const CreateInventory = () => {
         <div className="d-flex vh-100 justify-content-center align-items-center">
 
           {/* Create inventory */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="inventory-form">
             <div className="form-group py-3">
               <h4>Add Inventory</h4>
             </div>
 
             <div className="form-group">
-
               <label htmlFor="name">Name</label>
               <input
                 type="text"
@@ -147,16 +170,20 @@ const CreateInventory = () => {
                 className="form-control"
                 onChange={(e) => setDateOfPurchase(e.target.value)}
               />
-              <label htmlFor="image">Choose an image:</label>
-              <input
-                type="file"
-                className="form-control-file mt-2"
-                id="image"
-                accept=".jpg,.png, .jpeg"
-                onChange={(e) => {
-                  setImageFile(e.target.files[0])
-                }}
-              />
+
+              <div className="mt-2">
+                <label htmlFor="image">Choose an image:</label>
+                <input
+                  type="file"
+                  className="form-control-file"
+                  id="image"
+                  accept=".jpg,.png"
+                  onChange={(e) => setImageFile(e.target.files[0])}
+                />
+                <small className="form-text text-muted">
+                  Allowed file types: JPG, PNG. Maximum size: 2 MB.
+                </small>
+              </div>
             </div>
             <button className="btn editBtn mt-2">Submit</button>
           </form>
