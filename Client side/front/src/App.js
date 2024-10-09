@@ -110,10 +110,7 @@ function App() {
             <Route path="/Teacher" element={<LoginT />} />
             <Route path="/register" element={<Register />} />
             <Route path="/Tregister" element={<TeacherRegister />} />
-            <Route path="/dash" element={<Dashboard />} />
-            <Route path="/teacherdash" element={<TDashboard />} />
-            <Route path="/result" element={<ResultPage />} />
-
+            
             <Route path="/fpt" element={<ForgotPassword />} />
             <Route path="/fps" element={<SutdentForgotPassword />} />
 
@@ -121,6 +118,10 @@ function App() {
               <Route path="/addresult" element={<UploadForm />} />
               <Route path="/hall" element={<Hallallocation />} />
               <Route path="/error" element={<Error />} />
+              <Route path="/dash" element={<Dashboard />} />
+            <Route path="/teacherdash" element={<TDashboard />} />
+            <Route path="/result" element={<ResultPage />} />
+
               {/* <Route path='/payment' element={<AddPayment />} />              */}
               <Route path="/Student_Courses" element={<WatchCourses />} />
               <Route path="/Student_Courses/Course/:id" element={<Course />} />
