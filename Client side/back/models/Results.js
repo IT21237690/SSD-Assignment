@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 const resultsSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    // required: true,
   },
   marks: {
     type: String,
-    required: true,
+    // required: true,
   },
   subject: {
     type: String,

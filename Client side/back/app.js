@@ -21,6 +21,7 @@ const corsOptions = {
 app.use(express.json());
 app.use(cookiParser());
 app.use(cors(corsOptions));
+app.set('trust proxy', 1);
 
 const studentRouter = require("./routes/router");
 app.use("/student", studentRouter);
